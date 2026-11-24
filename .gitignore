@@ -1,0 +1,15 @@
+# runtime data
+data/
+*.db
+# private test data: real camera crops and their labels
+samples/real/
+samples/real_sheet.jpg
+samples/bench_sample/
+*.pkl
+# screenshot tooling scratch (fake-camera videos)
+.shots/
+# python / os
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store

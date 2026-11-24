@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barrier ANPR</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <h1>Barrier <span>· Georgian plate recognition</span></h1>
+  <div class="hdr-right">
+    <span id="perf" class="pill">—</span>
+    <span id="conn" class="pill">connecting…</span>
+  </div>
+</header>
+
+<main>
+  <section class="card video-card">
+    <div class="card-head">
+      <div class="tabs" id="tabs">
+        <button data-src="browser" class="active">Browser camera</button>
+        <button data-src="server" id="tab-server" hidden>Server camera</button>
+        <button data-src="upload">Photo upload</button>
+      </div>
+      <select id="cam-select" title="Camera"></select>
+    </div>
+    <div class="stage" id="stage">
+      <video id="video" autoplay playsinline muted></video>
+      <img id="server-img" alt="" hidden>
+      <img id="upload-img" alt="" hidden>
+      <canvas id="overlay"></canvas>
+      <div id="stage-msg" class="stage-msg">Allow camera access in the browser</div>
+      <label id="upload-drop" class="upload-drop" hidden>
+        <input type="file" id="file" accept="image/*">
+        <span>Choose or drop a photo of a car with a plate</span>
+      </label>
+    </div>
+    <div class="reads" id="reads"></div>
+  </section>
+
+  <section class="card gate-card">
+    <svg id="scene" viewBox="0 -90 340 320" aria-label="Barrier">
+      <rect x="0" y="196" width="340" height="34" class="road"/>
+      <g class="dash"><rect x="20" y="211" width="36" height="4"/><rect x="90" y="211" width="36" height="4"/><rect x="160" y="211" width="36" height="4"/><rect x="230" y="211" width="36" height="4"/><rect x="300" y="211" width="36" height="4"/></g>
+      <!-- traffic light -->
+      <rect x="18" y="70" width="34" height="74" rx="8" class="tl-body"/>
+      <rect x="32" y="144" width="6" height="52" class="post"/>
+      <circle id="tl-red" cx="35" cy="91" r="11" class="lamp red on"/>
+      <circle id="tl-green" cx="35" cy="123" r="11" class="lamp green"/>
+      <!-- barrier -->
+      <rect x="66" y="128" width="40" height="68" rx="4" class="cabinet"/>
+      <g id="arm" class="arm">
+        <rect x="86" y="132" width="230" height="14" rx="7" class="arm-bar"/>
+        <g class="stripes">
+          <rect x="116" y="132" width="20" height="14"/><rect x="156" y="132" width="20" height="14"/>
+          <rect x="196" y="132" width="20" height="14"/><rect x="236" y="132" width="20" height="14"/>
+          <rect x="276" y="132" width="20" height="14"/>
+        </g>
+      </g>
+      <circle cx="86" cy="139" r="10" class="pivot"/>
+      <rect x="300" y="146" width="6" height="50" class="post"/>
+    </svg>
+
+    <div id="banner" class="banner idle">
+      <div class="banner-title" id="banner-title">Waiting for a car</div>
+      <div id="banner-plate"></div>
+      <div class="banner-sub" id="banner-sub"></div>
+      <button id="banner-add" class="btn small" hidden>Add to database</button>
+    </div>
+
+    <div class="gate-actions">
+      <button id="btn-open" class="btn green">Open manually</button>
+      <button id="btn-close" class="btn">Close</button>
+    </div>
+  </section>
+
+  <section class="card events-card">
+    <div class="card-head"><h2>Access log</h2></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Time</th><th>Plate</th><th>Snapshot</th><th>Decision</th><th>Owner</th><th></th></tr></thead>
+        <tbody id="events"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="card plates-card">
+    <div class="card-head"><h2>Plate database <span id="plates-count" class="muted"></span></h2></div>
+    <form id="plate-form" class="plate-form">
+      <input name="plate" placeholder="AA-123-BB" required autocomplete="off">
+      <input name="owner" placeholder="Owner">
+      <input name="note" placeholder="Note">
+      <button class="btn green">Add</button>
+    </form>
+    <div id="form-err" class="err"></div>
+    <ul id="plates" class="plates"></ul>
+  </section>
+</main>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

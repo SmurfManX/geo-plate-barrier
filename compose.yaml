@@ -1,0 +1,30 @@
+services:
+  barrier:
+    build:
+      context: .
+      target: app
+    image: plate-barrier:latest
+    container_name: plate-barrier
+    restart: unless-stopped
+    ports:
+      - "${PORT:-8765}:8080"
+    volumes:
+      - barrier-data:/data
+    environment:
+      # Plates added on first start (format "AA-123-BB:Owner", comma-separated).
+      SEED_PLATES: "BU-100-LI:Demo"
+      PLATE_TEMPLATES: "LL-DDD-LL"   # add ",LLL-DDD" for legacy 1990s plates
+      MIN_AGREE: "3"           # frames that must independently read the same plate
+      AGREE_SHARE: "0.6"       # ...and hold at least 60% of the votes in the window
+      OPEN_SECONDS: "6"        # how long the barrier stays open (extended while the car is in view)
+      # Server-side camera (Linux): USB "/dev/video0" or "rtsp://user:pass@ip:554/stream".
+      # Empty = only the browser camera / photo upload.
+      CAMERA_SOURCE: ""
+    # On Linux with a USB camera, uncomment:
+    # devices:
+    #   - /dev/video0:/dev/video0
+    # group_add:
+    #   - video
+
+volumes:
+  barrier-data:
